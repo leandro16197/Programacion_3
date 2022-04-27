@@ -1,16 +1,22 @@
 package Programacion_3.Prog_3_Ejercicio_7;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Arbol {
     private Integer raiz;
     private Arbol izquierda;
     private Arbol derecha;
     private Integer size;
-
+    private List aux;
+    private int cont;
     public Arbol(Integer valor){
         this.raiz=valor;
         this.izquierda=null;
         this.derecha=null;
         this.size=null;
+        this.aux=new ArrayList<Integer>();
+        this.cont=0;
     }
 
     private void hoja(Integer e) {
@@ -50,6 +56,17 @@ public class Arbol {
         }
 
         return false;
+    }
+    public boolean hasElem(int valor) {
+        if(this.raiz == valor) {
+            return true;
+        }else if(this.izquierda != null){
+            return izquierda.hasElem(valor);
+        }else if(this.derecha != null){
+            return derecha.hasElem(valor);
+        }else {
+            return false;
+        }
     }
 
     private boolean deleteConDosHijo(Integer elemento) {
@@ -101,6 +118,34 @@ public class Arbol {
             }
         }
     }
+    public void  printPreOrder(){
+        if(this.raiz==null){
+            System.out.print("-");
+            return;
+        }
+        System.out.print(this.raiz+" ");
+        this.izquierda.printPreOrder();
+        this.derecha.printPreOrder();
+    }
+    public void  printPostOrder(){
+        if(this.raiz==null){
+            System.out.print("-");
+            return;
+        }
+        this.izquierda.printPreOrder();
+        this.derecha.printPreOrder();
+        System.out.print(this.raiz+" ");
+    }
+    public void  printIntOrder(){
+        if(this.raiz==null){
+            System.out.print("-");
+            return;
+        }
+        this.izquierda.printPreOrder();
+        System.out.print(this.raiz+" ");
+        this.derecha.printPreOrder();
+    }
+
     public Integer  getRoot(){
         return this.raiz;
     }
@@ -113,5 +158,46 @@ public class Arbol {
             return true;
         }
         return false;
+    }
+    public List getFrontera(){
+        if(this.izquierda==null && this.derecha==null){
+            this.aux.add(this.raiz);
+        }
+
+        return aux;
+    }
+    public Integer getMaxElem() {
+        Integer value = 0;
+        while(this.derecha != null) {
+            value = derecha.raiz;
+        }
+        return value;
+    }
+    public List<Integer> getLongestBranch(){
+        if(this.izquierda==null && this.derecha==null){
+            List<Integer>hoja=new ArrayList<>();
+            hoja.add(this.raiz);
+            return hoja;
+        }
+        List<Integer>ramaIzq=new ArrayList<>();
+        List<Integer>ramaDere=new ArrayList<>();
+        if(this.izquierda!=null){
+            ramaIzq.add(this.raiz);
+            ramaIzq.addAll(getLongestBranch());
+        }else if(this.derecha!=null){
+            ramaDere.add(this.raiz);
+            ramaDere.addAll(getLongestBranch());
+        }
+        if(ramaIzq.size()>=ramaDere.size()){
+            return ramaIzq;
+        }else{
+            return ramaDere;
+        }
+    }
+
+    public int getHeight(){
+        
+
+        return -1;
     }
 }
